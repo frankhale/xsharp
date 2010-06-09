@@ -1,0 +1,8 @@
+XSharp - A subset of the Xlib C API wrapped for Mono in C#
+
+This library will eventually be used to port aewm++/mini window managers to C#/Mono 
+
+Frank Hale <frankhale@gmail.com> aka majyk
+
+irc.freenode.net - ##sandbox
+
