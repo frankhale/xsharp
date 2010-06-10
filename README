@@ -2,7 +2,15 @@ XSharp - A subset of the Xlib C API wrapped for Mono in C#
 
 This library will eventually be used to port aewm++/mini window managers to C#/Mono 
 
+NOTE: The XEvent structure is set to an explicit size of 192 for a 64bit system. Edit
+that if you are on a 32 bit system to be half the size. I'll try to automate this later.
+
+The code is rough, not everything works or is totally correct yet. No documentation. 
+
+--
+
 Frank Hale <frankhale@gmail.com> aka majyk
 
 irc.freenode.net - ##sandbox
 
+This code is released under the GNU GPL license version 3

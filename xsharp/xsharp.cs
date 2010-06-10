@@ -576,13 +576,13 @@ namespace XSharp
   #endregion
 
   #region XPixmap Enums and Structures
-  //FIXME: XpmAttributes - made first pass at wrapping this but it's possibly still not totally correct!!
-  [StructLayout(LayoutKind.Sequential, Size = 140)]
+  //FIXME: XpmAttributes - this is not correct. Needs work.
+  [StructLayout(LayoutKind.Sequential)]
   public struct XpmAttributes
   {
     public XPixmapValueMask valuemask;
     public IntPtr visual;
-    public int colormap;
+    public IntPtr colormap;
     public int depth;
     public int width;
     public int height;
@@ -682,7 +682,6 @@ namespace XSharp
   public class XPixmap : XHandle
   {
     private XDisplay display;
-    //private int handle;
     private int mask;
 
     private int width = 0;
@@ -730,7 +729,9 @@ namespace XSharp
         mask = shapemask_return;
         width = attr.width;
         height = attr.height;
-        
+
+        //Console.WriteLine ("PIXMAP: W={0} | H={1}", width, height);
+
         success = true;
         
         return true;
@@ -2737,6 +2738,8 @@ namespace XSharp
     public bool shaped;
   }
 
+  //FIXME: Size set for 64bit system. Perhaps it's possible to automate this
+  // to detect if the system is 32 or 64bits and set the size accordingly.
   [StructLayout(LayoutKind.Sequential, Size = 192)]
   public struct _XEvent
   {

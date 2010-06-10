@@ -1,9 +1,16 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ctype="Workspace" />
-  <MonoDevelop.Ide.Workbench ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="xsharp/xsharp.cs" ctype="Workbench">
+    <Files>
+      <File FileName="windowtest/windowtest.cs" Line="6" Column="69" />
+      <File FileName="xsharp/xsharp.cs" Line="733" Column="11" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
+          <Node name="windowtest" expanded="True">
+            <Node name="References" expanded="True" />
+          </Node>
           <Node name="xsharp" expanded="True">
             <Node name="References" expanded="True" />
             <Node name="xsharp.cs" selected="True" />
