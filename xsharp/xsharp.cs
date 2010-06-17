@@ -6,6 +6,7 @@
 // Copyright (C) 2010 
 //
 // Frank Hale <frankhale@gmail.com> aka majyk
+//            <http://github.com/frankhale> @ GitHub
 //
 // irc.freenode.net - ##sandbox
 //
@@ -110,9 +111,12 @@ namespace XSharp
     {
       display = dpy;
       Handle = XLoadQueryFont (display.Handle, name);
-      
-      font = (XFontStruct)Marshal.PtrToStructure (Handle, typeof(XFontStruct));
-      
+
+      if(Handle!=IntPtr.Zero)
+        font = (XFontStruct)Marshal.PtrToStructure (Handle, typeof(XFontStruct));
+      else
+        throw new Exception("Font could not be loaded!");
+
       //Console.WriteLine("Ascent = {0} | Descent = {1}", font.ascent.ToString(), font.descent.ToString());
     }
 
@@ -261,7 +265,6 @@ namespace XSharp
       Handle = XDefaultGC (display.Handle, display.Screen.Number);
       is_default_gc = true;
     }
-
 
     public XGC (XDisplay dpy, XGCValuesMask valuemask, XGCValues values)
     {
@@ -500,14 +503,18 @@ namespace XSharp
 
     public XDisplay (string name)
     {
+      Screen = null;
       Handle = XOpenDisplay (name);
-      
-      Screen = new XScreen (this);
+
+      if(Handle!=IntPtr.Zero)
+        Screen = new XScreen (this);
+      else
+        throw new Exception("Display could not be opened!");
     }
 
-    public XDisplay () : this(null)
-    {
-    }
+    //public XDisplay () : this(null)
+    //{
+    //}
 
     public override void Dispose ()
     {
@@ -1204,9 +1211,9 @@ namespace XSharp
   [StructLayout(LayoutKind.Sequential)]
   public struct XWMHints
   {
-    public int flags;
+    public XWMHintFlags flags;
     public bool input;
-    public int initial_state;
+    public XWindowState initial_state;
     public int icon_pixmap;
     public IntPtr icon_window;
     public int icon_x, icon_y;
@@ -1274,6 +1281,7 @@ namespace XSharp
 
   public enum XKeySym
   {
+    NoSymbol = 0,
     XK_BackSpace = 0xff08,
     /* Back space, back char */    XK_Tab = 0xff09,
     XK_Linefeed = 0xff0a,
@@ -1614,7 +1622,7 @@ namespace XSharp
     public long all_event_masks;
     public long your_event_mask;
     public long do_not_propagate_mask;
-    public int override_redirect;
+    public bool override_redirect;
     public IntPtr screen;
   }
 
@@ -1636,39 +1644,23 @@ namespace XSharp
   //    Cursor cursor;    /* cursor to be displayed (or None) */
   //} XSetWindowAttributes;
 
-  //FIXME: Forgot to set the size of the XSetWindowAttributes struct. Plus I may not even need to define the struct explicity.
-  [StructLayout(LayoutKind.Explicit)]
+  [StructLayout(LayoutKind.Sequential)]
   public struct XSetWindowAttributes
   {
-    [FieldOffset(0)]
     public IntPtr background_pixmap;
-    [FieldOffset(8)]
-    public ulong background_pixel;
-    [FieldOffset(16)]
+    public long background_pixel;
     public IntPtr border_pixmap;
-    [FieldOffset(32)]
-    public ulong border_pixel;
-    [FieldOffset(36)]
+    public long border_pixel;
     public int bit_gravity;
-    [FieldOffset(40)]
     public int win_gravity;
-    [FieldOffset(44)]
     public int backing_store;
-    [FieldOffset(52)]
-    public ulong backing_planes;
-    [FieldOffset(60)]
-    public ulong backing_pixel;
-    [FieldOffset(64)]
-    public int save_under;
-    [FieldOffset(72)]
+    public long backing_planes;
+    public long backing_pixel;
+    public bool save_under;
     public XEventMask event_mask;
-    [FieldOffset(80)]
     public XEventMask do_not_propogate_mask;
-    [FieldOffset(84)]
-    public int override_redirect;
-    [FieldOffset(92)]
+    public bool override_redirect;
     public IntPtr colormap;
-    [FieldOffset(100)]
     public IntPtr cursor;
   }
   #endregion
@@ -1977,8 +1969,11 @@ namespace XSharp
       IntPtr window_return;
       
       XGetTransientForHint (display.Handle, Handle, out window_return);
-      
-      return new XWindow (display, window_return);
+
+      if(window_return==IntPtr.Zero)
+        return null;
+      else
+        return new XWindow (display, window_return);
     }
 
     public int SetTransientForHint (XWindow prop_window)
@@ -3488,12 +3483,10 @@ namespace XSharp
 
     private int HandleError (IntPtr d, IntPtr e)
     {
-      XErrorEvent err;
-      
-      err = (XErrorEvent)Marshal.PtrToStructure (e, typeof(XErrorEvent));
-      
-      Console.WriteLine ("Size of XErrorEvent = {0}", Marshal.SizeOf (err));
-      Console.WriteLine ("Size of IntPtr = {0}", Marshal.SizeOf(err.display));
+      XErrorEvent err = (XErrorEvent)Marshal.PtrToStructure (e, typeof(XErrorEvent));
+
+//      Console.WriteLine ("Size of XErrorEvent = {0}", Marshal.SizeOf (err));
+//      Console.WriteLine ("Size of IntPtr = {0}", Marshal.SizeOf(err.display));
       
       return ErrorHandlerEvent (err);
     }

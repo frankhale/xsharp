@@ -7,10 +7,24 @@ that if you are on a 32 bit system to be half the size. I'll try to automate thi
 
 The code is rough, not everything works or is totally correct yet. No documentation. 
 
+The contents of the monodevelop solution are:
+
+- xsharp : The subset of the Xlib C API wrapped
+
+- windowtest : A test application that tests a variety of functions within the library
+
+- mini : The beginnings of a port of my C++ window manager mini to C#. The code is not complete
+         and has not been tested. I am in the prototyping stage, raw porting of all code. This
+         will help me fill in the missing parts to xsharp and get things working. The port
+         is basically as close as a one for one as possible. As xsharp becomes more stable
+         the API will evolve to be more C# like instead of C like.
+
 --
 
 Frank Hale <frankhale@gmail.com> aka majyk
+           <http://github.com/frankhale> Me @ GitHub
+           <irc.freenode.net> On IRC @ ##sandbox
 
-irc.freenode.net - ##sandbox
+Date: 16 June 2010
 
 This code is released under the GNU GPL license version 3
